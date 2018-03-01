@@ -38,6 +38,11 @@
   #error Must enable TMC2130 support in Configuration_adv.h for EinsyRambo
 #endif
 
+#define X_IS_TMC2130
+#define Y_IS_TMC2130
+#define Z_IS_TMC2130
+#define E0_IS_TMC2130
+
 // TMC2130 Diag Pins (currently just for reference)
 #define X_DIAG_PIN      64
 #define Y_DIAG_PIN      69
@@ -51,8 +56,9 @@
 #define X_MAX_PIN          -1
 #define Y_MIN_PIN          69 //11
 #define Y_MAX_PIN          -1
-#define Z_MIN_PIN          68 //10
+#define Z_MIN_PIN          11 //10/YMIN
 #define Z_MAX_PIN          -1
+#define SERVO0_PIN       10 //Added for BLTouch compatibility
 
 //
 // Z Probe (when not Z_MIN_PIN)
@@ -97,6 +103,15 @@
 #define Z_MS2_PIN          -1
 #define E0_MS1_PIN         -1
 #define E0_MS2_PIN         -1
+
+#define MOTOR_CURRENT_PWM_XY_PIN 46
+#define MOTOR_CURRENT_PWM_Z_PIN  45
+#define MOTOR_CURRENT_PWM_E_PIN  44
+// Motor current PWM conversion, PWM value = MotorCurrentSetting * 255 / range
+#ifndef MOTOR_CURRENT_PWM_RANGE
+   #define MOTOR_CURRENT_PWM_RANGE 2000
+#endif
+#define DEFAULT_PWM_MOTOR_CURRENT  {1300, 1300, 1250} // DO NOT USE. These are legacy values and not used on the CE.
 
 //
 // Temperature Sensors
@@ -143,7 +158,7 @@
 //
 #if ENABLED(ULTRA_LCD)
 
-  #define KILL_PIN         32
+  #define KILL_PIN         -1 //32
 
   #if ENABLED(NEWPANEL)
 
